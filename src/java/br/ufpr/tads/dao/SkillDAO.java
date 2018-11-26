@@ -109,7 +109,7 @@ public class SkillDAO {
     
     public int insertSkill(Skill s) {
         PreparedStatement st;
-        if(s.isValid()){
+        if(s != null && s.isValid()){
             try {
                 st = con.prepareStatement(
                         "INSERT INTO Skill(skillName) VALUES(?)",Statement.RETURN_GENERATED_KEYS
@@ -122,6 +122,7 @@ public class SkillDAO {
                         s.setId(rs.getInt(1));
                     }
                 }
+                return s.getId();
             } catch (SQLException ex) {
                 Logger.getLogger(SkillDAO.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -150,6 +151,25 @@ public class SkillDAO {
         
         return false;
         
+    }
+
+    public boolean insertSkillIntoMutante(int idMutante, int idSkill) {
+        PreparedStatement st;
+        try {
+            st = con.prepareStatement(
+                    "INSERT INTO Mutante_has_Skill(Mutante_idMutante,Skill_idSkill) VALUES(?,?)",Statement.RETURN_GENERATED_KEYS
+            );
+            st.setInt(1, idMutante);
+            st.setInt(2, idSkill);
+            st.executeUpdate();
+            if(st != null){
+                return true;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SkillDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return false;
     }
 
 }

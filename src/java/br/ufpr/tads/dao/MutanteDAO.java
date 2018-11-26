@@ -121,17 +121,11 @@ public class MutanteDAO {
                     rs = st.getGeneratedKeys();
                     if(rs.next()){
                         m.setId(rs.getInt(1));
-                        SkillDAO skillDao = new SkillDAO();
-                        int[] listIdSkills;
-                        Skill tmpSkill;
-                        for(Skill s : m.getSkills()){
-                            tmpSkill = skillDao.getSkill(s.getSkillName());
-                            if(tmpSkill != null && tmpSkill.getId() > 0) s.setId(tmpSkill.getId());
-                            if(s.getId() <= 0){
-                                s.setId(skillDao.insertSkill(s));
-                            }
+                        if(insertSkills(m)){
+                            return m.getId();
                         }
                     }
+                    
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(MutanteDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -207,10 +201,50 @@ public class MutanteDAO {
         return listaMutantes;
     }
     
+    public boolean updateMutante(Mutante m){
+        PreparedStatement st;
+        if(validateMutante(m) && m.getId() > 0){
+            deleteMutanteSkills(m.getId());
+            if(insertSkills(m)){
+                try {
+                    st = con.prepareStatement(
+                            "UPDATE Mutante SET mutanteName = ? WHERE idMutante = ?"
+                    );
+                    st.setString(1, m.getMutanteName());
+                    st.setInt(2, m.getId());
+                    st.executeUpdate();
+
+                    int rowsAffected = st.executeUpdate();
+                    if(rowsAffected > 0)return true;
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(MutanteDAO.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+        return false;   
+    }
+    private boolean insertSkills(Mutante m){
+        SkillDAO skillDao = new SkillDAO();
+        Skill tmpSkill;
+        boolean hasError = false;
+        for(Skill s : m.getSkills()){
+            tmpSkill = skillDao.getSkill(s.getSkillName());
+            if(tmpSkill != null && tmpSkill.getId() > 0) s.setId(tmpSkill.getId());
+            if(s.getId() <= 0){
+                s.setId(skillDao.insertSkill(s));
+            }
+            hasError =  hasError && !skillDao.insertSkillIntoMutante(m.getId(),s.getId());
+        }
+        return !hasError;
+    }
+    
     private boolean validateMutante(Mutante m){
-        if(!m.isValid()) return false;
+        if(m == null || !m.isValid()) return false;
         return getMutante(m.getMutanteName()) == null;
     }
+
+    
 
     
 

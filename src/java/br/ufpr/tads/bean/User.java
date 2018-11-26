@@ -38,6 +38,11 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public boolean isValid() {
+        if(username == null && username.isEmpty()) return false;
+        return password != null && !password.isEmpty();
+    }
     
     
 }

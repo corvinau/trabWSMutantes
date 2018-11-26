@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,5 +50,28 @@ public class UserDAO {
             Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return u;
+    }
+    public int insertUser(User u){
+        PreparedStatement st;
+        if(u != null &&u.isValid()){
+            try {
+                st = con.prepareStatement(
+                        "INSERT INTO USER(IDUSER,PASSWORD) VALUES(?,?)",Statement.RETURN_GENERATED_KEYS
+                );
+                st.setString(1, u.getUsername());
+                st.setString(2, u.getPassword());
+                st.executeUpdate();
+                if(st != null){
+                    rs = st.getGeneratedKeys();
+                    if(rs.next()){
+                        u.setId(rs.getInt(1));
+                    }
+                }
+                return u.getId();
+            } catch (SQLException ex) {
+                Logger.getLogger(SkillDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return 0;
     }
 }
