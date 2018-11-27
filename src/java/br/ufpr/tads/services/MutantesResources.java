@@ -6,7 +6,9 @@
 package br.ufpr.tads.services;
 
 import br.ufpr.tads.bean.Mutante;
+import br.ufpr.tads.bean.User;
 import br.ufpr.tads.dao.MutanteDAO;
+import br.ufpr.tads.dao.UserDAO;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -179,4 +181,39 @@ public class MutantesResources {
 
     }
     
+    /**
+     * Retrieves representation of an instance of Servidor.GenericResource
+     * @return an instance of java.lang.String
+     */
+    @GET
+    @Path("/user/{userName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserByName(@PathParam("userName") String userName) {
+        UserDAO dao = new UserDAO();
+        User usuario = dao.getUser(userName);
+        return Response
+                .status(Response.Status.OK)
+                .header("Access-Control-Allow-Origin", "*")
+                .entity(userName)
+                .build();
+    }
+
+    @POST
+    @Path("/user")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response insertUser(User user) {
+        UserDAO dao = new UserDAO();
+        if(dao.insertUser(user) > 0)
+            return Response
+                .status(Response.Status.OK)
+                .header("Access-Control-Allow-Origin", "*")
+                .entity(user)
+                .build();
+        else
+            return Response
+                .status(Response.Status.CONFLICT)
+                .header("Access-Control-Allow-Origin", "*")
+                .build();
+    }
 }
