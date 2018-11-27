@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -201,6 +202,36 @@ public class MutanteDAO {
         return listaMutantes;
     }
     
+    public List<Mutante> getListMutantesWithSkill(String skillName) {
+        List<Mutante> listaMutantes = null;
+        PreparedStatement st;
+        try {
+            st = con.prepareStatement(
+                    "SELECT m.idMutante,m.mutanteName FROM Mutante_has_Skill "
+                            + "INNER JOIN mutante m ON m.idMutante = Mutante_idMutante"
+                            + "INNER JOIN skill s ON s.idSkill = Skill_idSkill "
+                            + "WHERE s.skillName LIKE '%?%'"
+            );
+            st.setString(1, skillName);
+                          
+            rs = st.executeQuery();
+            if(rs != null){
+                listaMutantes = new ArrayList<>();
+                Mutante m;
+                while(rs.next()){
+                    m = new Mutante();
+                    m.setId(rs.getInt("m.idMutante"));
+                    m.setMutanteName("m.mutanteName");
+                    listaMutantes.add(m);
+                }  
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MutanteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return listaMutantes;
+    }
+    
     public boolean updateMutante(Mutante m){
         PreparedStatement st;
         if(validateMutante(m) && m.getId() > 0){
@@ -243,8 +274,6 @@ public class MutanteDAO {
         if(m == null || !m.isValid()) return false;
         return getMutante(m.getMutanteName()) == null;
     }
-
-    
 
     
 
