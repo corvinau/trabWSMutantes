@@ -7,8 +7,10 @@
             <file>file:/C:/Users/ArtVin/Desktop/Bdmutantes/trabWSMutantes/src/java/br/ufpr/tads/services/MutantesResources.java</file>
             <file>file:/C:/Users/ArtVin/Desktop/Bdmutantes/trabWSMutantes/src/java/br/ufpr/tads/bean/Skill.java</file>
             <file>file:/C:/Users/ArtVin/Desktop/Bdmutantes/trabWSMutantes/src/java/br/ufpr/tads/dao/MutanteDAO.java</file>
-            <file>file:/C:/Users/ArtVin/Desktop/Bdmutantes/trabWSMutantes/src/java/br/ufpr/tads/dao/UserDAO.java</file>
             <file>file:/C:/Users/ArtVin/Desktop/Bdmutantes/trabWSMutantes/src/java/br/ufpr/tads/bean/User.java</file>
+            <file>file:/C:/Users/ArtVin/Desktop/Bdmutantes/trabWSMutantes/src/java/br/ufpr/tads/bean/Mutante.java</file>
+            <file>file:/C:/Users/ArtVin/Desktop/Bdmutantes/trabWSMutantes/src/java/br/ufpr/tads/dao/DBCredentials.java</file>
+            <file>file:/C:/Users/ArtVin/Desktop/Bdmutantes/trabWSMutantes/src/java/br/ufpr/tads/dao/ConnectionFactory.java</file>
         </group>
     </open-files>
 </project-private>
