@@ -6,9 +6,11 @@
 package br.ufpr.tads.services;
 
 import br.ufpr.tads.bean.Mutante;
+import br.ufpr.tads.bean.Skill;
 import br.ufpr.tads.bean.User;
 import br.ufpr.tads.dao.MutanteDAO;
 import br.ufpr.tads.dao.UserDAO;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -46,25 +48,24 @@ public class MutantesResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insertMutante(Mutante mutante) {
         MutanteDAO dao = new MutanteDAO();
-        if(dao.insertMutante(mutante) > 0)
+        if(dao.insertMutante(mutante) > 0){
             return Response
                 .status(Response.Status.OK)
                 .header("Access-Control-Allow-Origin", "*")
                 .entity(mutante)
                 .build();
-        else
+        }
+        else{
+            Mutante m = new Mutante();
+            m.setMutanteName("Teste");
             return Response
                 .status(Response.Status.CONFLICT)
                 .header("Access-Control-Allow-Origin", "*")
+                .entity(m)
                 .build();
+        }
     }
     
-    @POST
-    @Path("/login")
-    @Produces(MediaType.APPLICATION_JSON)
-    public String postJson() {
-        return null;
-    }
     
     /**
      * Retrieves representation of an instance of Servidor.GenericResource
@@ -76,11 +77,30 @@ public class MutantesResources {
     public Response getListMutante() {
         MutanteDAO dao = new MutanteDAO();
         List<Mutante> lista = dao.getListMutantes();
-        return Response
-                .status(Response.Status.OK)
-                .header("Access-Control-Allow-Origin", "*")
-                .entity(lista)
-                .build();
+        if(lista != null && lista.size() > 0){
+            return Response
+                    .status(Response.Status.OK)
+                    .header("Access-Control-Allow-Origin", "*")
+                    .entity(lista)
+                    .build();
+        }
+        else{
+            Mutante m = new Mutante();
+            m.setMutanteName("Mutante");
+            List<Skill> skills = new ArrayList<Skill>();
+            Skill skill = new Skill();
+            skill.setSkillName("NomeSkill");
+            skills.add(skill);
+            skill = new Skill();
+            skill.setSkillName("NomeSkill2");
+            skills.add(skill);
+            m.setSkills(skills);
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .header("Access-Control-Allow-Origin", "*")
+                    .entity(m)
+                    .build();
+        }
     }
 
     /**
@@ -103,6 +123,7 @@ public class MutantesResources {
 
     /**
      * Retrieves representation of an instance of Servidor.GenericResource
+     * @param nomeMutante
      * @param idMutante
      * @return an instance of java.lang.String
      */
@@ -111,16 +132,17 @@ public class MutantesResources {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getMutanteByName(@PathParam("nomeMutante") String nomeMutante) {
         MutanteDAO dao = new MutanteDAO();
-        Mutante mutante = dao.getMutante(nomeMutante);
+        List<Mutante> mutantes = dao.getListMutantesWithName(nomeMutante);
         return Response
                 .status(Response.Status.OK)
                 .header("Access-Control-Allow-Origin", "*")
-                .entity(mutante)
+                .entity(mutantes)
                 .build();
     }
     
     /**
      * Retrieves representation of an instance of Servidor.GenericResource
+     * @param skill
      * @return an instance of java.lang.String
      */
     @GET
@@ -138,7 +160,9 @@ public class MutantesResources {
     
     /**
      * PUT method for updating or creating an instance of MutantesResources
+     * @param mutante
      * @param content representation for the resource
+     * @return 
      */
     @PUT
     @Path("/mutante")
@@ -161,7 +185,8 @@ public class MutantesResources {
     
     /**
      * DELETE method for updating or creating an instance of MutantesResources
-     * @param content representation for the resource
+     * @param idMutante
+     * @return 
      */
     @DELETE
     @Path("/{idMutante}")
@@ -183,19 +208,28 @@ public class MutantesResources {
     
     /**
      * Retrieves representation of an instance of Servidor.GenericResource
+     * @param user
      * @return an instance of java.lang.String
      */
-    @GET
-    @Path("/user/{userName}")
+    @POST
+    @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserByName(@PathParam("userName") String userName) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getUserByName(User user) {
         UserDAO dao = new UserDAO();
-        User usuario = dao.getUser(userName);
-        return Response
-                .status(Response.Status.OK)
-                .header("Access-Control-Allow-Origin", "*")
-                .entity(userName)
-                .build();
+        User usuario = dao.getUser(user.getUsername());
+        if(usuario.getPassword().equals(user.getPassword())){
+            return Response
+                    .status(Response.Status.OK)
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
+        }
+        else{
+            return Response
+                    .status(Response.Status.CONFLICT)
+                    .header("Access-Control-Allow-Origin", "*")
+                    .build();
+        }
     }
 
     @POST

@@ -35,12 +35,12 @@ public class MutanteDAO {
         PreparedStatement st;
         try {
             st = con.prepareStatement(
-                    "SELECT IDMUTANTE FROM MUTANTE"
+                    "SELECT idMutante FROM Mutante"
             );
                           
             rs = st.executeQuery();
             if(rs != null){
-                lista = new ArrayList<Mutante>();
+                lista = new ArrayList<>();
                 Mutante m;
                 while(rs.next()){
                     m = null;
@@ -49,6 +49,35 @@ public class MutanteDAO {
                         lista.add(m);
                     }
                 }  
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MutanteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return lista;
+    }
+    
+    public List<Mutante> getListMutantesWithName(String name){
+        List<Mutante> lista = null;
+        PreparedStatement st;
+        try {
+            st = con.prepareStatement(
+                    "SELECT idMutante FROM Mutante WHERE mutanteName LIKE '%?%'"
+            );
+            if( name != null && !name.isEmpty()){ 
+                st.setString(1, name);
+                rs = st.executeQuery();
+                if(rs != null){
+                    lista = new ArrayList<>();
+                    Mutante m;
+                    while(rs.next()){
+                        m = null;
+                        m = getMutante(rs.getInt("IDMUTANTE"));
+                        if(m != null){
+                            lista.add(m);
+                        }
+                    }  
+                }
             }
         } catch (SQLException ex) {
             Logger.getLogger(MutanteDAO.class.getName()).log(Level.SEVERE, null, ex);
