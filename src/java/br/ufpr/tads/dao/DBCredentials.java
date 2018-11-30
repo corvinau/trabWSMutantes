@@ -13,5 +13,5 @@ public class DBCredentials {
     public static final String PORT = "3306";
     public static final String ADDRESS = "localhost";
     public static final String USER = "root" ;
-    public static final String PASSWORD = "";
+    public static final String PASSWORD = "root";
 }

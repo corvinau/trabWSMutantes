@@ -137,6 +137,31 @@ public class MutanteDAO {
         
         return m;
     }
+    public Mutante getMutanteEqualName(String nomeMutante){
+        Mutante m = null;
+        PreparedStatement st;
+        try {
+            st = con.prepareStatement(
+                    "SELECT idMutante FROM MUTANTE WHERE MUTANTENAME = ?"
+            );
+            st.setString(1, nomeMutante);
+                          
+            rs = st.executeQuery();
+            if(rs != null){
+                SkillDAO skillDAO = new SkillDAO();
+                while(rs.next()){
+                    m = new Mutante();
+                    m.setId(rs.getInt("idMutante"));
+                    m.setMutanteName(nomeMutante);
+                    m.setSkills(skillDAO.getListSkillsOfMutante(m.getId()));
+                }  
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MutanteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return m;
+    }
     
     public int insertMutante(Mutante m){
         PreparedStatement st;
@@ -301,7 +326,7 @@ public class MutanteDAO {
     
     private boolean validateMutante(Mutante m){
         if(m == null || !m.isValid()) return false;
-        return getMutante(m.getMutanteName()) == null;
+        return getMutanteEqualName(m.getMutanteName()) == null;
     }
 
     

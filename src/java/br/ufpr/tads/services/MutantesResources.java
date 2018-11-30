@@ -48,10 +48,10 @@ public class MutantesResources {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insertMutante(Mutante mutante) {
         MutanteDAO dao = new MutanteDAO();
-        if(dao.insertMutante(mutante) > 0){
+        if(dao.insertMutante(mutante) >= 0){
             return Response
                 .status(Response.Status.OK)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .entity(mutante)
                 .build();
         }
@@ -60,7 +60,7 @@ public class MutantesResources {
             m.setMutanteName("Teste");
             return Response
                 .status(Response.Status.CONFLICT)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .entity(m)
                 .build();
         }
@@ -80,25 +80,14 @@ public class MutantesResources {
         if(lista != null && lista.size() > 0){
             return Response
                     .status(Response.Status.OK)
-                    .header("Access-Control-Allow-Origin", "*")
+//                    .header("Access-Control-Allow-Origin", "*")
                     .entity(lista)
                     .build();
         }
         else{
-            Mutante m = new Mutante();
-            m.setMutanteName("Mutante");
-            List<Skill> skills = new ArrayList<Skill>();
-            Skill skill = new Skill();
-            skill.setSkillName("NomeSkill");
-            skills.add(skill);
-            skill = new Skill();
-            skill.setSkillName("NomeSkill2");
-            skills.add(skill);
-            m.setSkills(skills);
             return Response
                     .status(Response.Status.CONFLICT)
-                    .header("Access-Control-Allow-Origin", "*")
-                    .entity(m)
+//                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
     }
@@ -116,7 +105,7 @@ public class MutantesResources {
         Mutante mutante = dao.getMutante(idMutante);
         return Response
                 .status(Response.Status.OK)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .entity(mutante)
                 .build();
     }
@@ -135,7 +124,7 @@ public class MutantesResources {
         List<Mutante> mutantes = dao.getListMutantesWithName(nomeMutante);
         return Response
                 .status(Response.Status.OK)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .entity(mutantes)
                 .build();
     }
@@ -153,7 +142,7 @@ public class MutantesResources {
         List<Mutante> lista = dao.getListMutantesWithSkill(skill);
         return Response
                 .status(Response.Status.OK)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .entity(lista)
                 .build();
     }
@@ -173,13 +162,13 @@ public class MutantesResources {
         if(dao.updateMutante(mutante))
             return Response
                 .status(Response.Status.OK)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .entity(mutante)
                 .build();
         else
             return Response
                 .status(Response.Status.CONFLICT)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
     
@@ -196,12 +185,12 @@ public class MutantesResources {
         if(dao.deleteMutante(idMutante))
             return Response
                 .status(Response.Status.OK)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .build();
         else
             return Response
                 .status(Response.Status.CONFLICT)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .build();
 
     }
@@ -221,13 +210,14 @@ public class MutantesResources {
         if(usuario.getPassword().equals(user.getPassword())){
             return Response
                     .status(Response.Status.OK)
-                    .header("Access-Control-Allow-Origin", "*")
+                    .entity(usuario)
+//                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
         else{
             return Response
                     .status(Response.Status.CONFLICT)
-                    .header("Access-Control-Allow-Origin", "*")
+//                    .header("Access-Control-Allow-Origin", "*")
                     .build();
         }
     }
@@ -241,13 +231,13 @@ public class MutantesResources {
         if(dao.insertUser(user) > 0)
             return Response
                 .status(Response.Status.OK)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .entity(user)
                 .build();
         else
             return Response
                 .status(Response.Status.CONFLICT)
-                .header("Access-Control-Allow-Origin", "*")
+//                .header("Access-Control-Allow-Origin", "*")
                 .build();
     }
 }
