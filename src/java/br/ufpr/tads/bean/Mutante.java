@@ -43,7 +43,7 @@ public class Mutante {
 
     public boolean isValid() {
         if(mutanteName == null || mutanteName.isEmpty()) return false;
-        if(skills == null || skills.size() > 0) return false;
+        if(skills == null || skills.size() <= 0) return false;
         return skills.stream().noneMatch((s) -> ( !s.isValid() ));
     }
     

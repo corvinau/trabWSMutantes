@@ -22,22 +22,22 @@ public class ConnectionFactory {
         if( con == null){
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-                con = DriverManager.getConnection("jdbc:mysql://"+ DBCredentials.ADDRESS + ":" + DBCredentials.PORT + "/",
+                con = DriverManager.getConnection("jdbc:mysql://"+ DBCredentials.ADDRESS + ":" + DBCredentials.PORT + "/mutantedb",
                     DBCredentials.USER, DBCredentials.PASSWORD);
             } catch (ClassNotFoundException | SQLException ex) {
                 Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
             }
             //closing connection when the server is shutting down
-            Runtime.getRuntime().addShutdownHook(new Thread(){
-                @Override
-                public void run(){
-                    try {
-                        con.close();
-                    } catch (SQLException ex) {
-                        Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
+//            Runtime.getRuntime().addShutdownHook(new Thread(){
+//                @Override
+//                public void run(){
+//                    try {
+//                        con.close();
+//                    } catch (SQLException ex) {
+//                        Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//            });
             
         }
         return con;

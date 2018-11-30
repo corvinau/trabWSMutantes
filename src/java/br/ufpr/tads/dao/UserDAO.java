@@ -31,9 +31,7 @@ public class UserDAO {
         User u = null;
         PreparedStatement st;
         try {
-            st = con.prepareStatement(
-                    "SELECT IDUSER,PASSWORD FROM USER WHERE USERNAME = ?"
-            );
+            st = con.prepareStatement("SELECT IDUSER,PASSWORD FROM USER WHERE USERNAME = ?");
             if(username != null && !username.isEmpty()){
                 st.setString(1, username);
                 
@@ -42,7 +40,7 @@ public class UserDAO {
                 while(rs.next()){
                     u = new User();
                     u.setId(rs.getInt("IDUSER"));
-                    u.setUsername(rs.getString("USERNAME"));
+                    u.setUsername(username);
                     u.setPassword(rs.getString("PASSWORD"));
                 }
             }            
@@ -56,7 +54,7 @@ public class UserDAO {
         if(u != null &&u.isValid()){
             try {
                 st = con.prepareStatement(
-                        "INSERT INTO USER(IDUSER,PASSWORD) VALUES(?,?)",Statement.RETURN_GENERATED_KEYS
+                        "INSERT INTO USER(username,PASSWORD) VALUES(?,?)",Statement.RETURN_GENERATED_KEYS
                 );
                 st.setString(1, u.getUsername());
                 st.setString(2, u.getPassword());
